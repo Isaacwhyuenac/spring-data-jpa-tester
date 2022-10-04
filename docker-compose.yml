@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=earsadmin
+      - POSTGRES_PASSWORD=earsadmin
+      - POSTGRES_DB=ears_d0
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+#      - ./earsadmin.dmp:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "earsadmin", "-d", "ears_d0"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:6.2.7
+    container_name: redis
+    ports:
+      - '6379:6379'
+
+volumes:
+  pg_data:
